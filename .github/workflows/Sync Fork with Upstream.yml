@@ -30,7 +30,11 @@ jobs:
         git merge upstream/master -X ours --allow-unrelated-histories
         # 自动化解决冲突
         git add .
-        git commit -m "Merge upstream changes"
+        if git commit -m "Merge upstream changes"; then
+          echo "Changes committed";
+        else
+          echo "No changes to commit";
+        fi
 
     - name: Push to Remote
       run: git push origin master
