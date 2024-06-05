@@ -19,7 +19,7 @@ jobs:
           git config --global user.email '1987669587@qq.com'
 
     - name: Add Upstream Remote
-      run: git remote add upstream https://github.com/upstream-owner/upstream-repo.git
+      run: git remote add upstream https://github.com/gaotianliuyun/gao.git
 
     - name: Fetch Upstream Changes
       run: git fetch upstream
