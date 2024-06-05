@@ -1,40 +1,36 @@
-name: Sync Fork with Upstream
+name: Sync with Upstream
 
 on:
   schedule:
-    # 每天凌晨 1 点运行
-    - cron: '0 0 * * *'
-  workflow_dispatch:
-    # 手动触发工作流
+    - cron: "0 0 * * *"  # 每天午夜执行，可以根据需要调整时间
 
 jobs:
   sync:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout local repository
+    - name: Checkout
       uses: actions/checkout@v2
-      with:
-        persist-credentials: false
 
-    - name: Set up Git
-      run: |
-        git config --global user.name 'woshishiq1'
-        git config --global user.email '1987669587@qq.com'
+    - name: Configure Git
+        run: |
+          git config --global user.name 'woshishiq1'
+          git config --global user.email '1987669587@qq.com'
 
-    - name: Add upstream repository
-      run: |
-        git remote add upstream https://github.com/gaotianliuyun/gao.git
-        git fetch upstream
+    - name: Add Upstream Remote
+      run: git remote add upstream https://github.com/upstream-owner/upstream-repo.git
 
-    - name: Merge upstream changes and handle conflicts
-      run: |
-        git merge upstream/master || true
-        git merge --strategy-option=theirs || true
-        git commit -am "Merged upstream changes, kept local modifications" || true
+    - name: Fetch Upstream Changes
+      run: git fetch upstream
 
-    - name: Push changes
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Merge Upstream Changes
       run: |
-        git push origin master || true
+        git checkout master  # assuming your local branch is master
+        git merge upstream/master --no-commit --no-ff
+        # 自动化解决冲突
+        git checkout --ours .  # 保留上游仓库的更改可以将 --theirs 替换为 --ours
+        git add .
+        git merge --continue
+
+    - name: Push to Remote
+      run: git push origin master
