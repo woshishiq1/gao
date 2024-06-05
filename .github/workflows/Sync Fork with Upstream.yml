@@ -2,8 +2,8 @@ name: Sync with Upstream
 
 on:
   schedule:
-    - cron: "0 0 * * *"
-  workflow_dispatch:    # 每天午夜执行，可以根据需要调整时间
+    - cron: "0 0 * * *"  # Executes daily at midnight
+  workflow_dispatch:    # Allows manual trigger
 
 jobs:
   sync:
@@ -15,8 +15,8 @@ jobs:
 
     - name: Configure Git
       run: |
-          git config --global user.name 'woshishiq1'
-          git config --global user.email '1987669587@qq.com'
+        git config --global user.name 'woshishiq1'
+        git config --global user.email '1987669587@qq.com'
 
     - name: Add Upstream Remote
       run: git remote add upstream https://github.com/gaotianliuyun/gao.git
@@ -26,15 +26,12 @@ jobs:
 
     - name: Merge Upstream Changes
       run: |
-        git checkout master  # assuming your local branch is master
+        git checkout master  # Assuming your local branch is master
         git merge upstream/master -X ours --allow-unrelated-histories
-        # 自动化解决冲突
+        # Automatically resolve conflicts by favoring the upstream changes
+        git checkout --theirs .
         git add .
-        if git commit -m "Merge upstream changes"; then
-          echo "Changes committed";
-        else
-          echo "No changes to commit";
-        fi
 
     - name: Push to Remote
       run: git push origin master
+
