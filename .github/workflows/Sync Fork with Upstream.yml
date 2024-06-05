@@ -29,9 +29,8 @@ jobs:
         git checkout master  # assuming your local branch is master
         git merge upstream/master -X ours --allow-unrelated-histories
         # 自动化解决冲突
-        git checkout --ours .  # 保留上游仓库的更改可以将 --theirs 替换为 --ours
         git add .
-        git merge --continue
+        git commit -m "Merge upstream changes"
 
     - name: Push to Remote
       run: git push origin master
