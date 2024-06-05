@@ -27,7 +27,7 @@ jobs:
     - name: Merge Upstream Changes
       run: |
         git checkout master  # assuming your local branch is master
-        git merge upstream/master --no-commit --no-ff --allow-unrelated-histories
+        git merge upstream/master -X ours --allow-unrelated-histories
         # 自动化解决冲突
         git checkout --ours .  # 保留上游仓库的更改可以将 --theirs 替换为 --ours
         git add .
